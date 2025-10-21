@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from db import get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 
-teachers_bp = Blueprint('/api/teachers',__name__)
+teachers_bp = Blueprint('teachers_bp',__name__)
 
 @teachers_bp.route("/register", methods=['POST'])
 def register():
@@ -155,7 +155,37 @@ def login():
        if cursor:
           cursor.close()
        if con:
-          con.close()           
+          con.close() 
+
+
+@teachers_bp.route('/verify-email/<string:email>',methods=['POST'])
+def email_verify(email):
+   con = None
+   cursor = None
+
+   try:
+      con = get_db_connection()
+      cursor = con.cursor(dictionary=True)
+      cursor.execute('SELECT * FROM teachers WHERE email = %s',(email,))
+      result = cursor.fetchone()
+
+      if result != None:
+         return jsonify({"verify":True}),200
+      else:
+         return jsonify({"verify":False}),200
+
+   except Exception as e:
+      return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
+    
+   finally:
+      if cursor:
+         cursor.close()
+      if con:
+         con.close() 
+
+
+
+
 
             
 

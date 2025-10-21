@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from db import get_db_connection
 
-studentmarks_bp = Blueprint('/api/studentmarks',__name__)
+studentmarks_bp = Blueprint('studentmarks_bp',__name__)
 
 @studentmarks_bp.route("/get-all",methods=['GET'])
 def get_all_studentmarks():
