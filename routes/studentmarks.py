@@ -47,7 +47,31 @@ def get_studentmark_by_id(id):
        if cursor:
           cursor.close()
        if con:
-          con.close()           
+          con.close()
+
+@studentmarks_bp.route("/get-by-index/<string:index>",methods=['GET'])
+def get_studentmark_by_index(index):
+
+    con = None
+    cursor = None
+
+    try:
+      con = get_db_connection()
+      cursor = con.cursor(dictionary=True)
+      cursor.execute("SELECT * FROM studentmarks WHERE student_index = %s",(index,))
+      students = cursor.fetchone()
+
+      return jsonify(students)
+    
+    except Exception as e:
+      return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
+    
+    finally:
+       if cursor:
+          cursor.close()
+       if con:
+          con.close()            
+
 
 @studentmarks_bp.route("/save", methods=['POST'])
 def save():
@@ -62,10 +86,19 @@ def save():
       student_name = data.get("student_name")
       con = get_db_connection()
       cursor = con.cursor(dictionary=True)
-      cursor.execute("INSERT studentmarks ( student_index, marks, student_name ) VALUES ( %s, %s, %s )",(student_index, marks, student_name))
-      con.commit()
 
-      return jsonify({"message":"marks added suceessfully"}),201
+      cursor.execute("SELECT * FROM studentmarks WHERE student_index = %s",(student_index,))
+      student = cursor.fetchone()
+
+      if student is None:
+         cursor.execute("INSERT INTO studentmarks (student_index, marks, student_name) VALUES ( %s, %s, %s )",(student_index, marks, student_name))
+         con.commit()
+
+         return jsonify({"message":"marks added suceessfully"}),201
+      else:
+         
+         return jsonify({"error":"duplicate index, cannot add marks"}),409
+  
     
     except Exception as e:
       return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
