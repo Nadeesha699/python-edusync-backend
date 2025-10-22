@@ -63,7 +63,7 @@ EduSync Support Team
     app_password = os.getenv('GMAIL_APP_PASSWORD') # App password for Gmail
 
     # Call the send_email function
-    result = send_otp(sender_email, receiver_email, subject, body, app_password,otp)
+    # result = send_otp(sender_email, receiver_email, subject, body, app_password,otp)
 
     # Return the result as JSON response
-    return jsonify({"otp": result})
+    return jsonify({"otp": otp})

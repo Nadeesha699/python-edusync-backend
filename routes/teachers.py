@@ -140,7 +140,7 @@ def login():
 
       if teacher != None :
           if check_password_hash(teacher['password'],password):
-             return jsonify({"message":"login successfully","user id": teacher['id']}),200
+             return jsonify({"message":"login successfully","user_id": teacher['id']}),200
           else:
              return jsonify({"message":"login failed, incorrect password"}),401    
       else:
@@ -170,9 +170,9 @@ def email_verify(email):
       result = cursor.fetchone()
 
       if result != None:
-         return jsonify({"verify":True}),200
+         return jsonify(result),200
       else:
-         return jsonify({"verify":False}),200
+         return jsonify(result),200
 
    except Exception as e:
       return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
