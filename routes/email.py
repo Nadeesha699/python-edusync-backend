@@ -46,19 +46,23 @@ def send_otp_route():
 
     sender_email = os.getenv('SENDER_EMAIL')
     receiver_email = data.get('receiver_email')
-    subject = '"EduSync ICT Teacher Password Change Verification'
+    subject = 'EduSync ICT Teacher Password Change Verification'
     body = f"""
 Dear ICT Teacher,
 
 We received a request to change your EduSync account password.
+
 To verify this action, please use the One-Time Password (OTP) provided below:
 
-Your OTP Code: {otp}
+🔐 Your OTP Code: {otp}
 
-If you did not request this change, please ignore this email or contact EduSync support immediately.
+This code will expire in 5 minutes.
 
-Best regards,
-EduSync Support Team
+If you did not request this change, please ignore this email or contact EduSync Support immediately.
+
+Best regards,  
+EduSync ICT Support Team
+
 """
     app_password = os.getenv('GMAIL_APP_PASSWORD') # App password for Gmail
 

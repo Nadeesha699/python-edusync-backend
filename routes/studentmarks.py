@@ -80,10 +80,17 @@ def save():
     cursor = None
 
     try:
+
+      
       data = request.get_json()
       student_index = data.get("student_index")
       marks = data.get("marks")
       student_name = data.get("student_name")
+      batch = data.get("batch")
+
+      if not all([student_index,marks,student_name,batch]):
+         return jsonify({"error": "All fields are required"}), 400
+      
       con = get_db_connection()
       cursor = con.cursor(dictionary=True)
 
@@ -121,6 +128,11 @@ def update(id):
       student_index = data.get("student_index")
       marks = data.get("marks")
       student_name = data.get("student_name")
+      batch = data.get("batch")
+
+      if not all([student_index,marks,student_name,batch,id]):
+         return jsonify({"error": "All fields are required"}), 400
+      
       con = get_db_connection()
       cursor = con.cursor(dictionary=True)
       cursor.execute("UPDATE studentmarks SET student_index = %s, marks = %s, student_name = %s WHERE id = %s",(student_index, marks, student_name, id))

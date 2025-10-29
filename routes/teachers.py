@@ -18,6 +18,9 @@ def register():
       email = data.get("email")
       password = data.get("password")
 
+      if not all([name,phone_number,password,email]):
+         return jsonify({"error": "All fields are required"}), 400
+
       hashed_password = generate_password_hash(password)
 
       con = get_db_connection()
@@ -50,6 +53,9 @@ def update(id):
       email = data.get("email")
       password = data.get("password")
 
+      if not all([name,phone_number,password,email,id]):
+         return jsonify({"error": "All fields are required"}), 400
+      
       hashed_password = generate_password_hash(password)
 
       con = get_db_connection()
@@ -58,6 +64,7 @@ def update(id):
       con.commit()
 
       return jsonify({"message":"User updated suceessfully"}),200
+
     
     except Exception as e:
       return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500 
@@ -172,7 +179,7 @@ def email_verify(email):
       if result != None:
          return jsonify(result),200
       else:
-         return jsonify(result),200
+         return jsonify(result),404
 
    except Exception as e:
       return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
