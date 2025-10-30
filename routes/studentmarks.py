@@ -98,7 +98,7 @@ def save():
       student = cursor.fetchone()
 
       if student is None:
-         cursor.execute("INSERT INTO studentmarks (student_index, marks, student_name) VALUES ( %s, %s, %s )",(student_index, marks, student_name))
+         cursor.execute("INSERT INTO studentmarks (student_index, marks, student_name, batch) VALUES ( %s, %s, %s, %s )",(student_index, marks, student_name, batch))
          con.commit()
 
          return jsonify({"message":"marks added suceessfully"}),201
@@ -108,6 +108,7 @@ def save():
   
     
     except Exception as e:
+      print(e)
       return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
     
     finally:
@@ -135,7 +136,7 @@ def update(id):
       
       con = get_db_connection()
       cursor = con.cursor(dictionary=True)
-      cursor.execute("UPDATE studentmarks SET student_index = %s, marks = %s, student_name = %s WHERE id = %s",(student_index, marks, student_name, id))
+      cursor.execute("UPDATE studentmarks SET student_index = %s, marks = %s, student_name = %s, batch = %s WHERE id = %s",(student_index, marks, student_name, batch, id))
       con.commit()
 
       return jsonify({"message":"marks updated suceessfully"}),200
