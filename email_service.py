@@ -1,12 +1,11 @@
-from flask import Blueprint, request, jsonify
+import datetime
+import os
+import random
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import random
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+from flask import Blueprint, jsonify, request
 
 email_bp = Blueprint('email_bp',__name__)
 
@@ -41,7 +40,7 @@ def send_otp(sender_email, receiver_email, subject, body, app_password,otp):
 def send_otp_route():
     otp = random.randint(100000, 999999)
     
-    # Get JSON data from request
+   #  Get JSON data from request
     data = request.get_json()
 
     sender_email = os.getenv('SENDER_EMAIL')
@@ -66,8 +65,8 @@ EduSync ICT Support Team
 """
     app_password = os.getenv('GMAIL_APP_PASSWORD') # App password for Gmail
 
-    # Call the send_email function
-    # result = send_otp(sender_email, receiver_email, subject, body, app_password,otp)
+   #  Call the send_email function
+   #  otp = send_otp(sender_email, receiver_email, subject, body, app_password,otp)
+    expiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
 
-    # Return the result as JSON response
-    return jsonify({"otp": otp})
+    return jsonify({"message": "OTP sent successfully"})   

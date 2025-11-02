@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify
 from db import get_db_connection
+from jwt_token import token_required
 
 studentmarks_bp = Blueprint('studentmarks_bp',__name__)
 
 @studentmarks_bp.route("/get-all",methods=['GET'])
+@token_required
 def get_all_studentmarks():
 
     con = None
@@ -27,6 +29,7 @@ def get_all_studentmarks():
           con.close() 
 
 @studentmarks_bp.route("/get-by-id/<int:id>",methods=['GET'])
+@token_required
 def get_studentmark_by_id(id):
 
     con = None
@@ -74,6 +77,7 @@ def get_studentmark_by_index(index):
 
 
 @studentmarks_bp.route("/save", methods=['POST'])
+@token_required
 def save():
 
     con = None
@@ -118,6 +122,7 @@ def save():
           con.close() 
     
 @studentmarks_bp.route("/update-by-id/<int:id>", methods=['PUT'])
+@token_required
 def update(id):
 
     con = None
@@ -152,6 +157,7 @@ def update(id):
     
     
 @studentmarks_bp.route("/delete-by-id/<int:id>", methods=['DELETE'])
+@token_required
 def delete(id):
 
     con = None
