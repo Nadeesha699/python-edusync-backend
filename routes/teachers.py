@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 import datetime
 from email_service import send_otp
-from jwt_token import token_required
+from jwt_token import token_required_for_decode_only
 
 
 teachers_bp = Blueprint('teachers_bp',__name__)
@@ -211,7 +211,7 @@ def email_verify(email):
          con.close()        
 
 @teachers_bp.route("/decode",methods=['GET'])
-@token_required
+@token_required_for_decode_only
 def decode_token(decoded):
   user_id =  decoded['user_id']
   return jsonify({"user_id":user_id})
