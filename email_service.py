@@ -1,13 +1,6 @@
-import datetime
-import os
-import random
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-from flask import Blueprint, jsonify, request
-
-email_bp = Blueprint('email_bp',__name__)
 
 def send_otp(sender_email, receiver_email, subject, body, app_password,otp):
     # Set up the MIME message
@@ -35,38 +28,3 @@ def send_otp(sender_email, receiver_email, subject, body, app_password,otp):
 
     except Exception as e:
         return f"Failed to send email: {str(e)}"
-
-@email_bp.route('/send_otp', methods=['POST'])
-def send_otp_route():
-    otp = random.randint(100000, 999999)
-    
-   #  Get JSON data from request
-    data = request.get_json()
-
-    sender_email = os.getenv('SENDER_EMAIL')
-    receiver_email = data.get('receiver_email')
-    subject = 'EduSync ICT Teacher Password Change Verification'
-    body = f"""
-Dear ICT Teacher,
-
-We received a request to change your EduSync account password.
-
-To verify this action, please use the One-Time Password (OTP) provided below:
-
-🔐 Your OTP Code: {otp}
-
-This code will expire in 5 minutes.
-
-If you did not request this change, please ignore this email or contact EduSync Support immediately.
-
-Best regards,  
-EduSync ICT Support Team
-
-"""
-    app_password = os.getenv('GMAIL_APP_PASSWORD') # App password for Gmail
-
-   #  Call the send_email function
-   #  otp = send_otp(sender_email, receiver_email, subject, body, app_password,otp)
-    expiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
-
-    return jsonify({"message": "OTP sent successfully"})   
